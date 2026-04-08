@@ -7,13 +7,14 @@ export type CaseValidationResult = {
 
 export function validateTrainingCase(trainingCase: TrainingCase): CaseValidationResult {
   const errors: string[] = [];
+  const hasEmptyToken = (values: string[]) => values.some((value) => !value?.trim());
 
   if (!trainingCase.id?.trim()) errors.push('Case id is required.');
   if (!trainingCase.title?.trim()) errors.push('Case title is required.');
   if (!trainingCase.presentation?.trim()) errors.push('Case presentation is required.');
   if (!Array.isArray(trainingCase.reveals) || trainingCase.reveals.length === 0) {
     errors.push('At least one reveal is required.');
-  } else if (trainingCase.reveals.some((reveal) => !reveal?.trim())) {
+  } else if (hasEmptyToken(trainingCase.reveals)) {
     errors.push('Reveal entries cannot be empty.');
   }
 
@@ -27,14 +28,14 @@ export function validateTrainingCase(trainingCase: TrainingCase): CaseValidation
     if (!checkpoint.prompt?.trim()) errors.push(`${prefix}: prompt is required.`);
     if (!Array.isArray(checkpoint.acceptedAnswers) || checkpoint.acceptedAnswers.length === 0) {
       errors.push(`${prefix}: at least one accepted answer is required.`);
-    } else if (checkpoint.acceptedAnswers.some((answer) => !answer?.trim())) {
+    } else if (hasEmptyToken(checkpoint.acceptedAnswers)) {
       errors.push(`${prefix}: accepted answers cannot be empty.`);
     }
     if (!checkpoint.correctFeedback?.trim()) errors.push(`${prefix}: correct feedback is required.`);
     if (!checkpoint.incorrectFeedback?.trim()) errors.push(`${prefix}: incorrect feedback is required.`);
     if (!Array.isArray(checkpoint.tags) || checkpoint.tags.length === 0) {
       errors.push(`${prefix}: at least one tag is required.`);
-    } else if (checkpoint.tags.some((tag) => !tag?.trim())) {
+    } else if (hasEmptyToken(checkpoint.tags)) {
       errors.push(`${prefix}: tags cannot be empty.`);
     }
   });

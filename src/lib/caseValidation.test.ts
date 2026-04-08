@@ -64,4 +64,21 @@ describe('validateTrainingCase', () => {
     expect(result.errors).toContain('Checkpoint 1: accepted answers cannot be empty.');
     expect(result.errors).toContain('Checkpoint 1: tags cannot be empty.');
   });
+
+  it('accepts trimmed comma-separated style values when non-empty', () => {
+    const result = validateTrainingCase({
+      ...validCase,
+      reveals: ['  Reveal 1  '],
+      checkpoints: [
+        {
+          ...validCase.checkpoints[0],
+          acceptedAnswers: [' avs '],
+          tags: [' central-miss-risk ']
+        }
+      ]
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
 });

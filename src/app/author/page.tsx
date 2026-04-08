@@ -125,13 +125,13 @@ function handleImportBundle(event: ChangeEvent<HTMLInputElement>) {
 
     file
       .text()
-      .then((text) => {
+      .then((text: string) => {
         const preview = previewBundleImport(text);
         setPendingBundleText(text);
         setBundlePreview(preview);
         setMessage('Bundle loaded. Review preview and confirm import.');
       })
-      .catch((error) => setMessage(error instanceof Error ? error.message : 'Failed to load bundle.'));
+      .catch((error: unknown) => setMessage(error instanceof Error ? error.message : 'Failed to load bundle.'));
   }
 
   function handleConfirmImport() {
