@@ -119,7 +119,7 @@ export default function AuthorPage() {
     setMessage('Exported custom case bundle.');
   }
 
-  function handleImportBundle(event: ChangeEvent<HTMLInputElement>) {
+function handleImportBundle(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -180,6 +180,13 @@ export default function AuthorPage() {
 
   function addReveal() {
     setDraft((prev) => ({ ...prev, reveals: [...prev.reveals, ''] }));
+  }
+
+  function parseCommaSeparatedValues(value: string): string[] {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
   }
 
   return (
@@ -367,7 +374,7 @@ export default function AuthorPage() {
                 value={checkpoint.acceptedAnswers.join(', ')}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   updateCheckpoint(index, {
-                    acceptedAnswers: event.target.value.split(',').map((value) => value.trim())
+                    acceptedAnswers: parseCommaSeparatedValues(event.target.value)
                   })
                 }
               />
@@ -376,7 +383,7 @@ export default function AuthorPage() {
                 placeholder="Tags (comma-separated)"
                 value={checkpoint.tags.join(', ')}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  updateCheckpoint(index, { tags: event.target.value.split(',').map((value) => value.trim()) })
+                  updateCheckpoint(index, { tags: parseCommaSeparatedValues(event.target.value) })
                 }
               />
               <textarea

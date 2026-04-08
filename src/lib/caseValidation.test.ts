@@ -45,4 +45,23 @@ describe('validateTrainingCase', () => {
     expect(result.valid).toBe(false);
     expect(result.errors.some((msg) => msg.includes('accepted answer'))).toBe(true);
   });
+
+  it('rejects empty reveal, accepted answer, and tag values', () => {
+    const result = validateTrainingCase({
+      ...validCase,
+      reveals: ['Reveal 1', ''],
+      checkpoints: [
+        {
+          ...validCase.checkpoints[0],
+          acceptedAnswers: ['avs', '   '],
+          tags: ['central-miss-risk', '']
+        }
+      ]
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain('Reveal entries cannot be empty.');
+    expect(result.errors).toContain('Checkpoint 1: accepted answers cannot be empty.');
+    expect(result.errors).toContain('Checkpoint 1: tags cannot be empty.');
+  });
 });
